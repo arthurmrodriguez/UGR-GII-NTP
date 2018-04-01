@@ -44,6 +44,7 @@ public class ListadoTestP1 {
 
     /**
      * Test para comprobar que se ha reparado correctamente
+     * la repeticion de DNIs
      */
     @Test
     public void testComprobarReparacionEfectivaDnis(){

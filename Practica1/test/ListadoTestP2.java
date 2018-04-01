@@ -57,10 +57,9 @@ public class ListadoTestP2 {
     }
 
     /**
-     * Test del procedimiento de asignacion de grupos procesando
+     * Test del procedimiento de asignacion de Sectores procesando
      * los archivos de asignacion. Tambien implica la prueba de
-     * busqueda de empleados sin grupo asignado en alguna asignatura
-     *
+     * busqueda de empleados sin ruta en algun sector
      * @throws Exception algun error de busqueda
      */
     @Test
@@ -78,8 +77,8 @@ public class ListadoTestP2 {
     }
 
     /**
-     * Prueba para el procedimiento de conteo de grupos para cada una
-     * de las asignaturas
+     * Prueba para el procedimiento de conteo de empleados en cada ruta
+     * para el sector indicado
      */
     @Test
     public void testObtenerContadoresSector1() {
@@ -96,8 +95,7 @@ public class ListadoTestP2 {
 
     /**
      * Prueba del procedimiento general de obtencion de contadores
-     * para todas las asignaturas
-     *
+     * para todos los sectores
      * @throws Exception algun error
      */
     @Test
@@ -188,7 +186,5 @@ public class ListadoTestP2 {
 
     }
 
-
-
-
+    
 }
