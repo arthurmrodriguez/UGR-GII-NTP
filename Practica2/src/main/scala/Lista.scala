@@ -1,20 +1,23 @@
 /**
   * Interfaz generica para la lista
+  * sealed indica una clase sellada
+  * trait indica que es una interfaz
   * @tparam A
   */
 sealed trait Lista[+A]
 
 /**
-  * Objeto para definir lista vacia
+  * Objeto para definir y
+  * representar la lista vacia
   */
 case object Nil extends Lista[Nothing]
 
 /**
   * Clase para definir la lista como compuesta por elemento inicial
   * (cabeza) y resto (cola)
-  * @param cabeza
-  * @param cola
-  * @tparam A
+  * @param cabeza elemento inicial de la lista
+  * @param cola resto de la lista
+  * @tparam A tipo de dato de la lista
   */
 case class Cons[+A](cabeza : A, cola : Lista[A]) extends Lista[A]
 
@@ -26,39 +29,70 @@ object Lista {
    /**
      * Metodo para permitir crear listas sin usar new
      * @param elementos secuencia de elementos a incluir en la lista
-     * @tparam A
-     * @return
+     * @tparam A tipo de dato asociado
+     * @return Lista creada con elementos
      */
-   def apply[A](elementos : A*) : Lista[A] = ???
+   def apply[A](elementos : A*) : Lista[A] = {
+
+     //Si la lista está vacía, devolvemos Nil
+     //en caso contrario construimos el objeto Lista
+     //con el elemento cabeza y el resto de los elementos
+     if(elementos.isEmpty) Nil
+     else Cons(elementos.head,apply(elementos.tail : _*))
+
+   }
 
    /**
-     * Obtiene la longitud de una lista
-     * @param lista
-     * @tparam A
-     * @return
+     * Obtiene la longitud de una lista en funcion
+     * de cual sea el elemento lista
+     * @param lista elementos de la lista
+     * @tparam A tipo de dato asociado
+     * @return longitud de la lista
      */
-   def longitud[A](lista : Lista[A]) : Int = ???
+   def longitud[A](lista : Lista[A]) : Int = {
+
+     lista match {
+       case Nil => 0
+       case Cons(cabeza,cola) => 1 + longitud(cola)
+     }
+
+   }
 
    /**
      * Metodo para sumar los valores de una lista de enteros
-     * @param enteros
-     * @return
+     * en funcion de si es Nil o no
+     * @param enteros Lista de enteros a sumar
+     * @return suma de los valores en enteros
      */
-   def sumaEnteros(enteros : Lista[Int]) : Double = ???
+   def sumaEnteros(enteros : Lista[Int]) : Double = {
+
+     enteros match {
+       case Nil => 0.0
+       case Cons(cabeza, cola) => cabeza.toDouble + sumaEnteros(cola)
+     }
+
+   }
 
    /**
      * Metodo para multiplicar los valores de una lista de enteros
-     * @param enteros
-     * @return
+     * @param enteros Lista de enteros a multiplicar
+     * @return producto de los valores en enteros
      */
-   def productoEnteros(enteros : Lista[Int]) : Double = ???
+   def productoEnteros(enteros : Lista[Int]) : Double = {
+
+     enteros match {
+       case Nil => 0.0
+       case Cons(cabeza, cola) => cabeza.toDouble * sumaEnteros(cola)
+     }
+
+   }
 
    /**
      * Metodo para agregar el contenido de dos listas
-     * @param lista1
-     * @param lista2
-     * @tparam A
-     * @return
+     * @param lista1 lista a la que concatenar lista2
+     * @param lista2 lista que se va a concatenar
+     * @tparam A tipo de dato asociado
+     * @return listas concatenadas
      */
    def concatenar[A](lista1: Lista[A], lista2: Lista[A]): Lista[A] = ???
 
@@ -146,6 +180,6 @@ object Lista {
      * @tparam B parametro de tipo del elemento neutro
      * @return
      */
-   @annotation.tailrec
+   //@annotation.tailrec
    def foldLeft[A, B](lista : Lista[A], neutro: B)(funcion : (B, A) => B): B = ???
 }
