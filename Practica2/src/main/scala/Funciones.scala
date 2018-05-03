@@ -70,7 +70,7 @@ object Funciones {
       else if(acum < 0) false
       else if(cadena.head == '(') go(cadena.tail,acum+1)
       else if(cadena.head == ')') go(cadena.tail,acum-1)
-      else go(cadena,acum)
+      else go(cadena.tail,acum)
 
     }
 
@@ -144,6 +144,7 @@ object Funciones {
       }
     }
 
-    go(coleccion)
+    if(coleccion.length == 0) -1
+    else go(coleccion)
   }
 }
