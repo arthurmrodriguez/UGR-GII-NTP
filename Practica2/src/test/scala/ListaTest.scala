@@ -184,10 +184,4 @@ object ListaTest extends Properties("ListaTest"){
       }
     }
 
-
-
-
-
-
-
 }
