@@ -4,15 +4,15 @@ import org.scalacheck.Gen._
 
 object ListaTest extends Properties("ListaTest"){
 
-  // Metodo de generacion de listas de valores enteros
+  //Metodo de generacion de listas de valores enteros
   val secuenciaEnteros = listOf(choose(0,10))
+  //Funciones auxiliares para foldRight y foldLeft
   def mayor2(x:Int):Boolean = x>2
   def suma(x:Int, y:Int) = x+y
   def producto(x:Int, y:Int) = x*y
 
-  // LAS SIGUIENTES PROPERTIES SON PARA COMPROBAR QUE LOS METODOS
-  // CREADOS EN LA CLASE LISTA FUNCIONANBIEN
-
+  //Tests (properties) para comprobar el correcto funcionamiento
+  //de los metodos de la clase lista
   property("Longitud de lista") =
     forAll(secuenciaEnteros) {
       xs => {
@@ -29,12 +29,12 @@ object ListaTest extends Properties("ListaTest"){
   property("Suma de enteros") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+
         val lista:Lista[Int] = Lista(xs :_*)
         val sumaList = xs.map(x => x.toDouble).sum
         val sumaLista = Lista.sumaEnteros(lista)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         sumaList ?= sumaLista
       }
     }
@@ -42,12 +42,11 @@ object ListaTest extends Properties("ListaTest"){
   property("Producto de enteros") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
         val lista:Lista[Int] = Lista(xs :_*)
         val productoList = xs.map(x => x.toDouble).product
         val productoLista = Lista.productoEnteros(lista)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         productoList ?= productoLista
       }
     }
@@ -55,12 +54,11 @@ object ListaTest extends Properties("ListaTest"){
   property("Concatenar listas") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
         val lista:Lista[Int] = Lista(xs :_*)
         val concatList = xs:::xs
         val concatLista = Lista.concatenar(lista,lista)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         concatList ?= Lista.toList(concatLista)
       }
     }
@@ -69,12 +67,12 @@ object ListaTest extends Properties("ListaTest"){
   property("Sumar fold right") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+
         val lista:Lista[Int] = Lista(xs :_*)
         val sumaFRList = xs.foldRight(0)(suma)
         val sumaFRLista = Lista.sumaFoldRight(lista)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         sumaFRList.toDouble ?= sumaFRLista
       }
     }
@@ -82,12 +80,12 @@ object ListaTest extends Properties("ListaTest"){
   property("Producto fold right") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+
         val lista:Lista[Int] = Lista(xs :_*)
         val prodFRList = xs.foldRight(1)(producto)
         val prodFRLista = Lista.productoFoldRight(lista)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         prodFRList.toDouble ?= prodFRList
       }
     }
@@ -95,15 +93,16 @@ object ListaTest extends Properties("ListaTest"){
   property("Asignar cabeza") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+
+        //Hay que comprobar que la lista no este vacía
         val lista:Lista[Int] = Lista(xs :_*)
         val asignarCabezaList = xs match {
           case List() => List(6)
-          case a::c => 6::c
+          case a::b => 6::b
         }
         val asignarCabezaLista = Lista.asignarCabeza(lista,6)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         asignarCabezaList ?= Lista.toList(asignarCabezaLista)
       }
     }
@@ -111,15 +110,15 @@ object ListaTest extends Properties("ListaTest"){
   property("Tail clase Lista") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+        //Hay que comprobar que la lista no este vacía
         val lista:Lista[Int] = Lista(xs :_*)
         val tailList = xs match {
           case List() => xs
-          case a::c => xs.tail
+          case a::b => xs.tail
         }
         val tailLista = Lista.tail(lista)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         tailList ?= Lista.toList(tailLista)
       }
     }
@@ -127,15 +126,15 @@ object ListaTest extends Properties("ListaTest"){
   property("Eliminar n primeros elementos") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+        //Hay que comprobar que la lista no este vacía
         val lista:Lista[Int] = Lista(xs :_*)
         val eliminarList = xs match {
           case List() => xs
-          case a::c => xs.drop(2)
+          case a::b => xs.drop(3)
         }
-        val eliminarLista = Lista.eliminar(lista,2)
+        val eliminarLista = Lista.eliminar(lista,3)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         eliminarList ?= Lista.toList(eliminarLista)
       }
     }
@@ -143,15 +142,15 @@ object ListaTest extends Properties("ListaTest"){
   property("Eliminar mientras") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+        //Hay que comprobar que la lista no este vacía
         val lista:Lista[Int] = Lista(xs :_*)
         val eliminarMientrasList = xs match {
           case List() => xs
-          case a::c => xs.dropWhile(mayor2)
+          case a::b => xs.dropWhile(mayor2)
         }
         val eliminarMientrasLista = Lista.eliminarMientras(lista,mayor2)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         eliminarMientrasList ?= Lista.toList(eliminarMientrasLista)
       }
     }
@@ -159,15 +158,15 @@ object ListaTest extends Properties("ListaTest"){
   property("Eliminar ultimo de la lista") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+        //Hay que comprobar que la lista no este vacía
         val lista:Lista[Int] = Lista(xs :_*)
         val eliminarUltimoList = xs match {
           case List() => xs
-          case a::c => xs.dropRight(1)
+          case a::b => xs.dropRight(1)
         }
         val eliminarUltimoLista = Lista.eliminarUltimo(lista)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         eliminarUltimoList ?= Lista.toList(eliminarUltimoLista)
       }
     }
@@ -175,12 +174,12 @@ object ListaTest extends Properties("ListaTest"){
   property("Sumar fold left") =
     forAll(secuenciaEnteros) {
       xs => {
-        // objeto a partir de la clase Lista
+
         val lista:Lista[Int] = Lista(xs :_*)
         val sumarFoldLeftList = xs.map(x=>x.toDouble).sum
         val sumarFoldLeftLista = Lista.foldLeft(lista,0)(suma)
 
-        // se comprueba la igualdad
+        //Comprobacion de igualdad
         sumarFoldLeftList.toDouble ?= sumarFoldLeftLista
       }
     }
