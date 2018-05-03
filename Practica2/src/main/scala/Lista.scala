@@ -17,7 +17,7 @@ case object Nil extends Lista[Nothing]
   * (cabeza) y resto (cola)
   * @param cabeza elemento inicial de la lista
   * @param cola resto de la lista
-  * @tparam A tipo de dato de la lista
+  * @tparam A tipo de dato asociado
   */
 case class Constructor[+A](cabeza : A, cola : Lista[A]) extends Lista[A]
 
@@ -42,6 +42,13 @@ object Lista {
 
    }
 
+  /**
+    * Metodo auxiliar para convertir el tipo Lista
+    * en un tipo List (para comparaciones)
+    * @param lista a comparar
+    * @tparam A tipo de dato asociado
+    * @return Objeto List
+    */
   def toList[A](lista : Lista[A]):List[A] = {
     lista match {
       case Nil => List()
@@ -69,7 +76,7 @@ object Lista {
      * Metodo para sumar los valores de una lista de enteros
      * en funcion de si es Nil o no
      * @param enteros Lista de enteros a sumar
-     * @return suma de los valores en enteros
+     * @return Resultado de la suma de enteros
      */
    def sumaEnteros(enteros : Lista[Int]) : Double = {
 
@@ -83,7 +90,7 @@ object Lista {
    /**
      * Metodo para multiplicar los valores de una lista de enteros
      * @param enteros Lista de enteros a multiplicar
-     * @return producto de los valores en enteros
+     * @return Resultado del producto de enteros
      */
    def productoEnteros(enteros : Lista[Int]) : Double = {
 
@@ -99,7 +106,7 @@ object Lista {
      * @param lista1 lista a la que concatenar lista2
      * @param lista2 lista que se va a concatenar
      * @tparam A tipo de dato asociado
-     * @return listas concatenadas
+     * @return listas concatenadas en una nueva lista
      */
    def concatenar[A](lista1: Lista[A], lista2: Lista[A]): Lista[A] = {
 
@@ -116,8 +123,8 @@ object Lista {
      * @param lista elementos a aplicar la funcion
      * @param neutro elemento neutro
      * @param funcion funcion a aplicar
-     * @tparam A tipo de dato A
-     * @tparam B tipo de dato B
+     * @tparam A tipo de dato asociado A
+     * @tparam B tipo de dato asociado B
      * @return aplicacion de una funcion a una lista
      */
    def foldRight[A, B](lista : Lista[A], neutro : B)
@@ -125,7 +132,7 @@ object Lista {
 
      lista match {
        case Nil => neutro
-       case Constructor(cabeza,cola) => foldRight(cola,funcion(cabeza,neutro))(funcion)
+       case Constructor(cabeza,cola) => funcion(cabeza,foldRight(cola,neutro)(funcion))
      }
 
    }
@@ -150,14 +157,14 @@ object Lista {
    def productoFoldRight(listaEnteros : Lista[Int]) : Double = {
 
      def producto(x:Int, y:Int) = x*y
-     foldRight(listaEnteros,0)(producto)
+     foldRight(listaEnteros,1)(producto)
 
    }
 
    /**
-     * Reemplaza la cabeza por nuevo valor. Se asume que si la lista esta vacia
+     * Reemplaza la cabeza por nuevo valor.
+     * Se asume que si la lista esta vacia
      * se devuelve una lista con el nuevo elemento
-     *
      * @param lista a reemplazar la cabeza
      * @param cabezaNueva nuevo valor en cabeza
      * @tparam A tipo de dato asociado
@@ -208,12 +215,12 @@ object Lista {
    }
 
    /**
-     * Elimina elementos mientra se cumple la condicion pasada como
-     * argumento
+     * Elimina elementos mientra se cumple
+     * la condicion pasada como argumento
      * @param lista lista con la que trabajar
      * @param criterio predicado a considerar para continuar con el borrado
-     * @tparam A tipo de datos a usar
-     * @return
+     * @tparam A tipo de dato asociado
+     * @return Nueva lista con los elementos eliminados
      */
    def eliminarMientras[A](lista : Lista[A], criterio: A => Boolean) : Lista[A] = {
 
@@ -242,7 +249,7 @@ object Lista {
      lista match{
        case Nil => lista
        case Constructor(cabeza,cola) => {
-         if(longitud(cola) == 1)
+         if(longitud(lista) == 1)
            Nil
          else
            concatenar(Lista(cabeza),eliminarUltimo(cola))
@@ -261,7 +268,7 @@ object Lista {
      * @return
      */
    @annotation.tailrec
-   def foldLeft[A, B](lista : Lista[A], neutro: B)(funcion : (B, A) => B): B = {
+   def foldLeft[A, B](lista : Lista[A], neutro: B)(funcion : (A,B) => B): B = {
 
      lista match {
        case Nil => neutro
