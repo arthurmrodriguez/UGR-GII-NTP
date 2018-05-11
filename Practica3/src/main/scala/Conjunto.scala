@@ -127,7 +127,7 @@ object Conjunto {
     def iterar(elemento: Int): Boolean = {
 
       if(elemento == LIMITE+1) true
-      else if(!conjunto.funcionCaracteristica(elemento)) iterar(LIMITE+1)
+      else if(!conjunto.funcionCaracteristica(elemento)) iterar(elemento+1)
       else{
         predicado(elemento) && iterar(elemento + 1)
       }
