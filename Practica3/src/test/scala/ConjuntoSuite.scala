@@ -53,7 +53,7 @@ class ConjuntoSuite extends FunSuite {
       val conjunto2 = Conjunto((x: Int) => x > 5)
 
       // Conjunto union: enteros mayores de 3
-      val conjuntoUnion:Conjunto = Conjunto.union(conjunto1, conjunto2)
+      val conjuntoUnion : Conjunto = Conjunto.union(conjunto1, conjunto2)
 
       // 4, 5, 6 y 7  pertenecen a la union
       assert(conjuntoUnion(4))
@@ -114,6 +114,7 @@ class ConjuntoSuite extends FunSuite {
       assert(!conjuntoFiltrado(11))
    }
 
+
    /**
      * Test de forall
      */
@@ -137,7 +138,10 @@ class ConjuntoSuite extends FunSuite {
       assert(!existe(conjunto, x => x > 10))
 
       // Si existe en el conjunto algun elemento menor de 15
+      // y si algun elemento es 5
       assert(existe(conjunto, x => x < 15))
+      assert(existe(conjunto, x => x == 5))
+
    }
 
    /**
@@ -149,9 +153,9 @@ class ConjuntoSuite extends FunSuite {
 
       // Mapeo: sumar 25 a todos los elementos del conjunto
       val resultado = map(conjunto, (x => x + 25))
-
       // 30 y 31 pertenecen al conjunto resultado, ya que
       // 5 y 6 pertenecen al conjunto de partida
+
       assert(resultado(30))
       assert(resultado(31))
 
