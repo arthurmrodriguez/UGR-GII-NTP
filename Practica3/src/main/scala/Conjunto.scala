@@ -44,7 +44,7 @@ object Conjunto {
     * Limite para la iteracion necesaria algunas operaciones,
     * entre -1000 y 1000
     */
-  private final val LIMITE = 100
+  private final val LIMITE = 1000
   
   /**
     * Metodo que permite crear objetos de la clase Conjunto
