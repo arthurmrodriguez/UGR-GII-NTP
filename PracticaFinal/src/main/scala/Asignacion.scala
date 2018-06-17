@@ -136,7 +136,7 @@ object Asignacion{
     */
   def apply(dominio : Dominio, indice : Int) : Asignacion = {
 
-    if(indice > dominio.maximoIndice)
+    if(indice >= dominio.maximoIndice)
       Asignacion(dominio)
 
     else{
