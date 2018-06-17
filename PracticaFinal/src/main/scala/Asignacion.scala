@@ -140,11 +140,9 @@ object Asignacion{
       Asignacion(dominio)
 
     else{
-      val valoresIndice = dominio.indiceVariables.map{case(variable, index) =>
-        (indice/dominio.pesos(index)) % variable.numEstados
-      }.toList
-
-      new Asignacion(dominio,valoresIndice)
+      new Asignacion(dominio, dominio.variables.map(variable =>
+        (indice/dominio.pesosVariables(variable)) % variable.numEstados
+      ))
     }
   }
 }
