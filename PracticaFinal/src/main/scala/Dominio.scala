@@ -8,13 +8,13 @@ class Dominio(val variables : List[Variable]) {
     * Dato miembro para guardar el indice correspondiente
     * a cada variable en la lista
     */
-  val indiceVariables = (variables zipWithIndex).toMap
+  val indiceVariables : Map[Variable,Int] = (variables zipWithIndex).toMap
 
   /**
     * Dato miembro para asociar a cada variable
     * su peso correspondiente
     */
-  val pesosVariables = (variables zip calcularPesosVariables).toMap
+  val pesosVariables : Map[Variable, Int] = (variables zip calcularPesosVariables).toMap
 
   /**
     * Metodo para comprobar si el dominio es vacio
@@ -113,7 +113,7 @@ class Dominio(val variables : List[Variable]) {
     * Metodo para calcular los pesos de las variables
     * Hace uso de una funcion auxiliar para calcularlos
     * de forma recursiva
-    * @return
+    * @return Lista de pesos de variables
     */
   private def calcularPesosVariables : List[Int] = {
 

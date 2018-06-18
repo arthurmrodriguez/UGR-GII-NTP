@@ -90,4 +90,14 @@ object MainPrueba extends App{
   // Se muestra la asignacion obtenida: debe ser X1=2, X2=3, X3=1, X4=0
   println("Asignacion resultante a traves de un indice: " + asignacionDeIndice)
 
+
+  // __________________________________________________________________________
+  // PRUEBA VALORES ARRAY
+  // __________________________________________________________________________
+
+  val variable1 = Variable("X3",2)
+  val variable2 = Variable("X4",2)
+  val valoresArray1 = ValoresArray(Dominio(List(variable1,variable2)),List(0.2, 0.8, 0.6, 0.4))
+  println(valoresArray1)
+
 }

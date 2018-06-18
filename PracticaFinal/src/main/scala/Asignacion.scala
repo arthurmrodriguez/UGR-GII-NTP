@@ -81,6 +81,10 @@ class Asignacion(val dominio : Dominio, val valores : List[Int]) {
       null
   }
 
+  /**
+    * Metodo privado para asignar valores a un Dominio
+    * @return Valores asignados a cada variable
+    */
   private def asignarValoresADominio : Map[Variable,Int] = {
 
     if(valores.length == dominio.longitud){
