@@ -159,5 +159,20 @@ object MainPrueba extends App{
   println("__________________________________________________________________________")
 
 
+  // COMPROBACION COMBINAR
+  val valoresArbol2 = ValoresArbol(Dominio(List(var1,var2)), List(0.3,0.7,0.6,0.4))
+  val arbolCombinado1 = valoresArbol2.combinar(ValoresArbol(Dominio(List()), List(0.3)))
+  println("__________________________________________________________________________")
+  println("ValoresArbol Combinado (Variable-NodoHoja): ")
+  println(arbolCombinado1)
+  println("__________________________________________________________________________")
+
+  val valoresArbol3 = ValoresArbol(Dominio(List(var1,var3)), List(0.1,0.1,1.0,0.0))
+  val arbolCombinado2 = valoresArbol2.combinar(valoresArbol3)
+  println("__________________________________________________________________________")
+  println("ValoresArbol Combinado (Variable-Variable): ")
+  println(arbolCombinado2)
+  println("__________________________________________________________________________")
+
 
 }

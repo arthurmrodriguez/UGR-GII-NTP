@@ -1,12 +1,12 @@
 /**
   * Clase Asignacion, compuesta por un dominio
   * y una lista de valores para las variables
-  * @param dominio
-  * @param valores
+  * @param dominio del Potencial
+  * @param valores del Potencial
   */
 class Asignacion(val dominio : Dominio, val valores : List[Int]) {
 
-  val datos =  asignarValoresADominio
+  val datos :Map[Variable,Int] =  asignarValoresADominio
 
   /**
     * Metodo para comprobar si se define una

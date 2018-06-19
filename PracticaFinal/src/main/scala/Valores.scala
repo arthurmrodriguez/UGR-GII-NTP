@@ -199,17 +199,49 @@ case class ValoresArray(override val dominio: Dominio, datos : List[Double]) ext
   */
 case class ValoresArbol(override val dominio : Dominio, raiz : Nodo) extends Valores(dominio) {
 
+  /**
+    * Metodo para obtener el valor
+    * de una asignacion
+    * @param asignacion
+    * @return valor de la asignacion
+    */
   override def obtenerValor(asignacion: Asignacion): Double = raiz.obtenerValor(asignacion)
 
+  /**
+    * Metodo para obtener todos los valores del potencial
+    * @return Lista de valores
+    */
   override def obtenerValores: List[Double] = raiz.obtenerValores
 
+  /**
+    * Metodo para convertir un ValoresArbol en un
+    * ValoresArray
+    * @return Objeto ValoresArray
+    */
   override def convertir: ValoresArray = ValoresArray(dominio,obtenerValores)
 
-  def combinarArbolArbol(otro : ValoresArbol) : ValoresArbol = ???
+  /**
+    * Metodo para combinar dos ValoresArbol
+    * @return Objeto ValoresArbol
+    */
+  def combinarArbolArbol(otro : ValoresArbol) : ValoresArbol =
+    ValoresArbol(dominio,raiz.combinar(otro.raiz))
 
+  /**
+    * Metodo para restringir un ValoresArbol segun
+    * una variable y un estado de la misma
+    * @param variable a restringir
+    * @param estado correspondiente
+    * @return Objeto Valores con valores restringidos a la variable
+    *         y el estado correspondiente
+    */
   override def restringir(variable: Variable, estado: Int): ValoresArbol =
     ValoresArbol(dominio,raiz.restringir(variable, estado))
 
+  /**
+    * Metodo para representar un ValoresArbol por pantalla
+    * @return cadena que representa los Valores
+    */
   override def toString: String = raiz.toString(0)
 
 
@@ -217,6 +249,14 @@ case class ValoresArbol(override val dominio : Dominio, raiz : Nodo) extends Val
 
 object ValoresArbol{
 
+  /**
+    * Metodo para crear un ValoresArbol a partir
+    * de un dominio y un conjunto de valores a traves
+    * de una funcion auxiliar
+    * @param dominio del Potencial
+    * @param valores del Potencial
+    * @return Objeto ValoresArbol
+    */
   def apply(dominio : Dominio, valores : List[Double]) : ValoresArbol = {
 
     def go(indiceDominio : Int, asignacion : Asignacion) : Nodo = {
@@ -258,7 +298,8 @@ object ValoresArbol{
     }
 
     // Llamada recursiva al metodo go
-    val raiz = go(0, Asignacion(Dominio(List())))
+    val raiz = if (dominio.longitud == 0) NodoHoja(valores(0))
+      else go(0, Asignacion(Dominio(List())))
 
     // Creacion del arbol
     new ValoresArbol(dominio,raiz)
