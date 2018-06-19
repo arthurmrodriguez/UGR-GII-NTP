@@ -94,10 +94,32 @@ object MainPrueba extends App{
   // __________________________________________________________________________
   // PRUEBA VALORES ARRAY
   // __________________________________________________________________________
-
+  println("__________________________________________________________________________")
   val variable1 = Variable("X3",2)
   val variable2 = Variable("X4",2)
   val valoresArray1 = ValoresArray(Dominio(List(variable1,variable2)),List(0.2, 0.8, 0.6, 0.4))
-  println(valoresArray1)
+  println("ValoresArray:")
+  println(valoresArray1 + "\n")
+  println("__________________________________________________________________________")
+
+
+  // PRUEBA COMBINAR ARRAY ARRAY
+  val var1 = Variable("X1",2)
+  val var2 = Variable("X2",2)
+  val var3 = Variable("X3",2)
+
+  val valoresThis = ValoresArray(Dominio(List(var1,var2)),List(0.3,0.7,0.6,0.4))
+  val valoresOtro = ValoresArray(Dominio(List(var2,var3)),List(0.9,0.1,1.0,0.0))
+  println("__________________________________________________________________________")
+  println("ValoresArray: \n")
+  println("valoresThis:")
+  println(valoresThis + "\n")
+  println("valoresThis")
+  println(valoresOtro + "\n")
+  println("ValoresArray combinado: ")
+  val combinarArray = valoresThis.combinar(valoresOtro)
+  println(combinarArray)
+  println("__________________________________________________________________________")
+
 
 }

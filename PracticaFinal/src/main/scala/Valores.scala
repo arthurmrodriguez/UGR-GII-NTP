@@ -2,7 +2,7 @@
   * Clase abstracta para definir Valores
   * @param dominio sobre el que se define
   */
-abstract class Valores(dominio : Dominio){
+abstract class Valores(val dominio : Dominio){
 
   /**
     *  Metodo abstracto para obtener el valor
@@ -38,8 +38,35 @@ abstract class Valores(dominio : Dominio){
     * @return nuevo objeto Valores combinado
     */
   def combinar(otro : Valores) : Valores = {
-    null
+
+    this match {
+      case potencial1 : ValoresArray => {
+
+        val otroValor = otro match {
+          case potencial2 : ValoresArbol => potencial2.convertir
+          case potencial2 : ValoresArray => potencial2
+        }
+
+        potencial1.combinarArrayArray(otroValor)
+
+      }
+      case potencial1 : ValoresArbol =>{
+
+        val otroValor = otro match {
+          case potencial2 : ValoresArray => potencial2.convertir
+          case potencial2 : ValoresArbol => potencial2
+        }
+
+        potencial1.combinarArbolArbol(otroValor)
+      }
+
+    }
+
   }
+
+  def restringir(variable : Variable, valor : Double) : List[Double] = ???
+
+  def convertir : Valores = ???
 
 
 }
@@ -49,7 +76,7 @@ abstract class Valores(dominio : Dominio){
   * @param dominio sobre el que se define
   * @param datos valores asociados al Potencial
   */
-class ValoresArray(val dominio: Dominio, val datos : List[Double]) extends Valores(dominio){
+case class ValoresArray(override val dominio: Dominio, datos : List[Double]) extends Valores(dominio){
 
   /**
     * Implementacion del metodo abstracto obtener valor
@@ -86,12 +113,64 @@ class ValoresArray(val dominio: Dominio, val datos : List[Double]) extends Valor
 
   }
 
+  /**
+    * Metodo para combinar dos objetos
+    * de la clase ValoresArray
+    * @param otro objeto ValoresArray
+    * @return nuevo ValoresArray combinado
+    */
+  def combinarArrayArray(otro : ValoresArray) : ValoresArray = {
+
+    // Generamos el nuevo dominio sumando los dominios
+    // de this y de otro
+    val dominioFinal = dominio + otro.dominio
+
+    // Recorremos todos los indices validos del nuevo dominio
+    // realizamos distintas operaciones para combinar los ValoresArray
+    val listaValores = (0 until dominioFinal.maximoIndice).map(indice => {
+
+      // Creamos la nueva asignacion sobre el dominio
+      val asignacionFinal = Asignacion(dominioFinal,indice)
+
+      // Proyectar asignacionFinal sobre this.dominio
+      val asignacionThis = asignacionFinal.proyectar(dominio)
+
+      // Proyectar asignacionFinal sobre otro.dominio
+      val asignacionOtro = asignacionFinal.proyectar(otro.dominio)
+
+      // Obtenemos el valor como el producto de los dos valores
+      obtenerValor(asignacionThis)*otro.obtenerValor(asignacionOtro)
+    }).toList
+
+    ValoresArray(dominioFinal,listaValores)
+
+  }
+
+
+  override def restringir(variable: Variable, valor: Double): List[Double] = 
+
+  override def convertir: ValoresArbol = ???
+
 }
 
-object ValoresArray{
 
-  def apply(dominio: Dominio, datos : List[Double]): ValoresArray = {
-    new ValoresArray(dominio, datos)
-  }
+/**
+  * Clase ValoresArbol para la gestion de Potenciales
+  * @param dominio sobre el que se define
+  */
+case class ValoresArbol(override val dominio : Dominio) extends Valores(dominio) {
+
+
+  override def obtenerValor(asignacion: Asignacion): Double = ???
+
+  override def obtenerValores: List[Double] = ???
+
+  override def toString: String = ???
+
+  override def convertir: ValoresArray = ???
+
+  def combinarArbolArbol(otro : ValoresArbol) : ValoresArbol = ???
+
+
 
 }
