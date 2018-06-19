@@ -40,7 +40,7 @@ abstract class Valores(val dominio : Dominio){
   def combinar(otro : Valores) : Valores = {
 
     this match {
-      case potencial1 : ValoresArray => {
+      case potencial1 : ValoresArray =>
 
         val otroValor = otro match {
           case potencial2 : ValoresArbol => potencial2.convertir
@@ -49,8 +49,7 @@ abstract class Valores(val dominio : Dominio){
 
         potencial1.combinarArrayArray(otroValor)
 
-      }
-      case potencial1 : ValoresArbol =>{
+      case potencial1 : ValoresArbol =>
 
         val otroValor = otro match {
           case potencial2 : ValoresArray => potencial2.convertir
@@ -59,8 +58,6 @@ abstract class Valores(val dominio : Dominio){
 
         potencial1.combinarArbolArbol(otroValor)
       }
-
-    }
 
   }
 
@@ -75,8 +72,12 @@ abstract class Valores(val dominio : Dominio){
     */
   def restringir(variable : Variable, estado : Int) : Valores
 
-  def convertir : Valores = ???
-
+  /**
+    * Metodo para convertir un tipo de Valores
+    * a otro tipo
+    * @return un tipo Valores contrario al anterior
+    */
+  def convertir : Valores
 
 }
 
@@ -110,7 +111,6 @@ case class ValoresArray(override val dominio: Dominio, datos : List[Double]) ext
     (0 until dominio.maximoIndice).map(indice => {
       Asignacion(dominio, indice).toString + " = " +datos(indice)
     }) mkString "\n"
-
 
   }
 
@@ -183,7 +183,12 @@ case class ValoresArray(override val dominio: Dominio, datos : List[Double]) ext
 
   }
 
-  override def convertir: ValoresArbol = ???
+  /**
+    * Metodo para convertir un objeto ValoresArray en
+    * un objeto de tipo ValoresArbol
+    * @return Objeto ValoresArbol
+    */
+  override def convertir: ValoresArbol = ValoresArbol.apply(dominio,datos)
 
 }
 
@@ -192,21 +197,72 @@ case class ValoresArray(override val dominio: Dominio, datos : List[Double]) ext
   * Clase ValoresArbol para la gestion de Potenciales
   * @param dominio sobre el que se define
   */
-case class ValoresArbol(override val dominio : Dominio) extends Valores(dominio) {
+case class ValoresArbol(override val dominio : Dominio, raiz : Nodo) extends Valores(dominio) {
 
+  override def obtenerValor(asignacion: Asignacion): Double = raiz.obtenerValor(asignacion)
 
-  override def obtenerValor(asignacion: Asignacion): Double = ???
+  override def obtenerValores: List[Double] = raiz.obtenerValores
 
-  override def obtenerValores: List[Double] = ???
-
-  override def toString: String = ???
-
-  override def convertir: ValoresArray = ???
+  override def convertir: ValoresArray = ValoresArray(dominio,obtenerValores)
 
   def combinarArbolArbol(otro : ValoresArbol) : ValoresArbol = ???
 
-  override def restringir(variable: Variable, estado: Int): Valores = ???
+  override def restringir(variable: Variable, estado: Int): ValoresArbol =
+    ValoresArbol(dominio,raiz.restringir(variable, estado))
+
+  override def toString: String = raiz.toString(0)
 
 
+}
+
+object ValoresArbol{
+
+  def apply(dominio : Dominio, valores : List[Double]) : ValoresArbol = {
+
+    def go(indiceDominio : Int, asignacion : Asignacion) : Nodo = {
+
+      // Obtenemos la variable correspondiente al indice
+      val variable = dominio.variables(indiceDominio)
+
+      // Creamos una lista intermedia
+      var listaHijosAux : List[Nodo] = List()
+
+      // Si no es el indice correspondiente a la ultima variable
+      // del dominio, seguimos recorriendo las demas variables
+      if(indiceDominio < dominio.longitud-1) {
+
+        listaHijosAux = (0 until variable.numEstados).map(estado => {
+
+          go(indiceDominio + 1, asignacion +
+            (variable, estado))
+        }).toList
+      }
+
+      else{
+
+        // Cuando llegamos a la ultima de las variables
+        // recorremos sus estados y creamos el NodoHoja
+        // correspondiente a la asignacion resultante
+        listaHijosAux = (0 until variable.numEstados).map(estado => {
+
+          // Asignacion de nodo hoja, creacion de nodo hoja
+          // y agregacion de
+          val asignacionHoja = asignacion + (variable,estado)
+          NodoHoja(valores(asignacionHoja.calcularIndice))
+
+        }).toList
+
+      }
+
+      NodoVariable(variable,listaHijosAux)
+    }
+
+    // Llamada recursiva al metodo go
+    val raiz = go(0, Asignacion(Dominio(List())))
+
+    // Creacion del arbol
+    new ValoresArbol(dominio,raiz)
+
+  }
 
 }

@@ -108,18 +108,56 @@ object MainPrueba extends App{
   val var2 = Variable("X2",2)
   val var3 = Variable("X3",2)
 
-  val valoresThis = ValoresArray(Dominio(List(var1,var2)),List(0.3,0.7,0.6,0.4))
-  val valoresOtro = ValoresArray(Dominio(List(var2,var3)),List(0.9,0.1,1.0,0.0))
+  val valores1 = ValoresArray(Dominio(List(var1,var2)),List(0.3,0.7,0.6,0.4))
+  val valores2 = ValoresArray(Dominio(List(var2,var3)),List(0.9,0.1,1.0,0.0))
   println("__________________________________________________________________________")
   println("ValoresArray: \n")
-  println("valoresThis:")
-  println(valoresThis + "\n")
-  println("valoresThis")
-  println(valoresOtro + "\n")
+  println("valores1:")
+  println(valores1 + "\n")
+  println("valores2")
+  println(valores2 + "\n")
   println("ValoresArray combinado: ")
-  val combinarArray = valoresThis.combinar(valoresOtro)
-  println(combinarArray)
+  val valoresArrayCombinado = valores1.combinar(valores2)
+  println(valoresArrayCombinado)
   println("__________________________________________________________________________")
+
+
+  // PRUEBA RESTRINGIR VALORES ARRAY
+  println("__________________________________________________________________________")
+  println("ValoresArray: \n")
+  println("valores1:")
+  println(valores1 + "\n")
+  println("Valores restringidos a (X1,0) sobre valores1: ")
+  val valoresRestringidos = valores1.restringir(var1,0)
+  println(valoresRestringidos)
+  println("Valores restringidos a (X1,0) sobre valoresArrayCombinado: ")
+  val valoresRestComb = valoresArrayCombinado.restringir(var1,0)
+  println(valoresRestComb)
+  println("__________________________________________________________________________")
+
+
+  // PRUEBA VALORES ARBOL
+  println("__________________________________________________________________________")
+  println("ValoresArbol: \n")
+  println("valoresArbol:")
+  val valoresArbol = ValoresArbol.apply(Dominio(List(var1,var2,var3)),
+    List(0.27,0.03,0.63,0.07,0.6,0.0,0.4,0.0))
+  println(valoresArbol)
+  println("Comprobacion de obtener valor")
+  val asignacionValoresArbol = Asignacion(Dominio(List(var1,var2,var3)),List(1,1,0))
+  println("Valor de X1,X2,X3 con valores (1,1,0) debe ser 0.4 : " +
+    valoresArbol.obtenerValor(asignacionValoresArbol))
+  println("__________________________________________________________________________")
+
+
+  // PRUEBA RESTRINGIR VALORES ARBOL
+  println("__________________________________________________________________________")
+  println("ValoresArbol: \n")
+  println("Restringir Valores Arbol (X2 y valor 0)")
+  val arbolRestringido = valoresArbol.restringir(var2,0)
+  println(arbolRestringido)
+  println("__________________________________________________________________________")
+
 
 
 }
