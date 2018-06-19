@@ -64,7 +64,16 @@ abstract class Valores(val dominio : Dominio){
 
   }
 
-  def restringir(variable : Variable, valor : Double) : List[Double] = ???
+  /**
+    * Metodo para restringir un conjunto de Valores
+    * en funcion de una de las Variables de su dominio
+    * y uno de sus estados
+    * @param variable a restringir
+    * @param estado correspondiente
+    * @return Objeto Valores con valores restringidos a la variable
+    *         y el estado correspondiente
+    */
+  def restringir(variable : Variable, estado : Int) : Valores
 
   def convertir : Valores = ???
 
@@ -83,15 +92,7 @@ case class ValoresArray(override val dominio: Dominio, datos : List[Double]) ext
     * @param asignacion sobre la que se quiere obtener el valor
     * @return valor de la asignacion
     */
-  override def obtenerValor(asignacion: Asignacion): Double = {
-
-    if(asignacion.dominio.variables == dominio.variables)
-      datos(asignacion.calcularIndice)
-
-    else
-      -1.0
-  }
-
+  override def obtenerValor(asignacion: Asignacion): Double = datos(asignacion.calcularIndice)
 
   /**
     * Implementacion del metodo para obtener la lista de valores
@@ -146,8 +147,41 @@ case class ValoresArray(override val dominio: Dominio, datos : List[Double]) ext
 
   }
 
+  /**
+    * Metodo para restringir un conjunto de Valores
+    * en funcion de una de las Variables de su dominio
+    * y uno de sus estados
+    * @param variable a restringir
+    * @param estado correspondiente
+    * @return Objeto Valores con valores restringidos a la variable
+    *         y el estado correspondiente
+    */
+  override def restringir(variable: Variable, estado : Int) : ValoresArray = {
 
-  override def restringir(variable: Variable, valor: Double): List[Double] = 
+    // Se genera un nuevo dominio sin la variable pasada como argumento
+    val dominioFinal = dominio - variable
+
+    // Recorremos todos los indices del dominio
+    val listaValores = (0 until dominioFinal.maximoIndice).map(indice => {
+
+      // Generar una asignacion sobre el indice
+      val asignacionFinal = Asignacion.apply(dominioFinal, indice)
+
+      // Generar una asignacion completa añadiendo a la anterior la variable
+      // eliminada y el estado
+      val asignacionCompleta = asignacionFinal + (variable, estado)
+
+      // Proyectamos sobre dominio final para mantener el orden
+      val asignacionOrdenada = asignacionCompleta.proyectar(dominio)
+
+      // Obtener el valor correspondiente a la asignacion completa
+      obtenerValor(asignacionOrdenada)
+
+    }).toList
+
+    ValoresArray(dominioFinal,listaValores)
+
+  }
 
   override def convertir: ValoresArbol = ???
 
@@ -170,6 +204,8 @@ case class ValoresArbol(override val dominio : Dominio) extends Valores(dominio)
   override def convertir: ValoresArray = ???
 
   def combinarArbolArbol(otro : ValoresArbol) : ValoresArbol = ???
+
+  override def restringir(variable: Variable, estado: Int): Valores = ???
 
 
 
